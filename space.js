@@ -7,6 +7,11 @@ let boardWidth = tileSize * columns
 let boardHeight = tileSize * rows
 let context
 
+//logo
+let logoWidth = 512
+let logoHeight = 221
+let logoImg
+
 //ship
 let shipWidth = tileSize*2
 let shipHeight = tileSize
@@ -60,32 +65,71 @@ function randomAlien() {
     return aliensPics[a]
 }
 
+
+
 window.onload = function () {
     board = document.getElementById("board")
     board.width = boardWidth
     board.height = boardHeight
     context = board.getContext("2d") //rysuje na tablicy
 
-    shipImg = new Image()
-    shipImg.src = './ship.png'
-    shipImg.onload = function() {
-        context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height)
+    logoImg = new Image()
+        
+    logoImg.src = './logo.png'
+        logoImg.onload = function() {
+            context.drawImage(logoImg, 0, 50, logoWidth, logoHeight)
+        }
+        
+        logoImg = new Image()
+        logoImg.src = "./logo.png"
+        
+        context.fillStyle = 'white'
+        context.font = "28px courier"
+        context.fillText("Press SPACEBAR to start game", 20 , 400)
+
+
+    document.addEventListener('keyup', e => {
+        if (e.code === 'Space') {
+            context.clearRect
+            game()
+          }
+    }, { once: true })
+
+    function game() { 
+        shipImg = new Image()
+        shipImg.src = './ship.png'
+        shipImg.onload = function() {
+            context.drawImage(shipImg, ship.x, ship.y, ship.width, ship.height)
+        }
+
+        
+        alienImg = new Image()
+        alienImg.src
+        createAliens()
+
+
+        requestAnimationFrame(update)
+        document.addEventListener('keydown', moveShip)
+        document.addEventListener("keyup", shoot)
     }
-
-    
-    alienImg = new Image()
-    alienImg.src = `${randomAlien()}`
-    createAliens()
-
-
-    requestAnimationFrame(update)
-    document.addEventListener('keydown', moveShip)
-    document.addEventListener("keyup", shoot)
 }
 
 function update() {
     if (gameOver) {
-        return;
+        // context.clearRect
+        // logoImg.src = './logo.png'
+        // logoImg.onload = function() {
+        //     context.drawImage(logoImg, 0, 50, logoWidth, logoHeight)
+        // }
+        
+        // logoImg = new Image()
+        // logoImg.src = "./logo.png"
+        
+        // context.fillStyle = 'white'
+        // context.font = "28px courier"
+        // context.fillText("GAME", 20 , 400)
+        // context.fillText("OVER", 20 , 430)
+        return
     }
 
     
@@ -111,10 +155,11 @@ function update() {
                     alien.y += alienHeight
                 } )
             }
-            context.drawImage(alienImg, alien.x, alien.y, alien.width, alien.height)
+            context.drawImage(alien.img, alien.x, alien.y, alien.width, alien.height)
 
             if ( alien.y >= ship.y ) {
                 gameOver = true
+                context.clearRect
             }
         }
     })
@@ -142,7 +187,7 @@ function update() {
     if (alienCount == 0) {
         alienCol = Math.min(alienCol + 1, columns/2 -2)
         alienRows = Math.min(alienRows + 1, rows-4)
-        alienVelocityX += 0.2
+        alienVelocityX += 20
         alienArray = []
         bulletArray = []
         createAliens()
@@ -151,7 +196,6 @@ function update() {
     context.fillStyle = 'white'
     context.font = "16px courier"
     context.fillText(score, 20, 20)
-
 }
 
 
@@ -186,7 +230,7 @@ function createAliens() {
 
     alienArray.forEach((alien, index) => {
         const alienImgIndex = index % aliensPics.length;
-        alien.img.src = aliensPics[alienImgIndex];
+        alien.img.src = aliensPics[Math.floor(Math.random() * aliensPics.length)];
     })
     
     alienCount = alienArray.length;

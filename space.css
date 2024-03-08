@@ -3,6 +3,7 @@ body {
     text-align: center;
     display: flex;
     align-items: center;
+    justify-content: center;
     flex-direction: column;
     gap: 2vh;
     height: 100vh;
@@ -11,22 +12,12 @@ body {
     overflow: hidden;
 }
 
-.logo {
-    width: 50%;
-    height: auto;
-}
-
-.gameBoard {
-    padding: 20px;
-    border-radius: 30px;
-}
-
 canvas {
     border-radius: 25px;
 }
 
 #board {
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(31, 31, 31);
     box-shadow: -15px -15px 50px rgb(0, 0, 0);
     border: 5px solid white;
 }
